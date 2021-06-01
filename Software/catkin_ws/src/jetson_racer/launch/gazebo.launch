@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<launch>
+
+<!-- these are the arguments you can pass this launch file, for example paused:=true -->
+<arg name="paused" default="true"/>
+<arg name="use_sim_time" default="true"/>
+<arg name="gui" default="true"/>
+<arg name="headless" default="false"/>
+<arg name="debug" default="false"/>
+<arg name="model" default="$(find jetson_racer)/urdf/jetracer.xacro"/>
+<!-- We resume the logic in empty_world.launch -->
+
+<include file="$(find gazebo_ros)/launch/empty_world.launch">
+</include>
+
+<!-- Load the URDF into the ROS Parameter Server -->
+
+<param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
+<rosparam file= "$(find jetson_racer)/config/joints.yaml" command="load"/>
+<rosparam file= "$(find jetson_racer)/config/ackermann.yaml" command="load"/>
+<rosparam command="load" file="$(find jetson_racer)/config/hardware_gazebo.yaml" />
+
+<node name="controller_manager" pkg="controller_manager" type="spawner"
+ respawn="true" output="screen"
+args="ackerman_control"/>
+
+<!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+
+<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+  args="-z 1.0 -unpause -urdf -model Ackermann_Drive -param robot_description"/>
+ 
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find jetson_racer)/rviz/jetracer.rviz"/>
+    
+    <node name="joint_state_publisher" pkg="jetson_racer" type="joint_state.py"/>
+</launch>
