@@ -12,15 +12,15 @@ import math
 rear_vel = 0
 front_rot = 0
 
-#Throttle
-def callback_throttle(throt):
-    global rear_vel
-    rear_vel = rear_vel + throt.data*0.01
+# #Throttle
+# def callback_throttle(throt):
+#     global rear_vel
+#     rear_vel = rear_vel + throt.data*0.01
 
-#Steering
-def callback_steering(steer):
-    global front_rot
-    front_rot = steer.data*-0.4
+# #Steering
+# def callback_steering(steer):
+#     global front_rot
+#     front_rot = steer.data*-0.4
 
 def callback_cmd(cmd):
     global front_rot
@@ -28,6 +28,11 @@ def callback_cmd(cmd):
     rear_vel = rear_vel + cmd.linear.x
     front_rot = cmd.angular.z
 
+def callback_odom(odom):
+    global front_rot
+    global rear_vel
+    rear_vel = rear_vel + odom.twist.twist.linear.x
+    front_rot = odom.twist.twist.angular.z
 
 
 def talker():
@@ -36,24 +41,9 @@ def talker():
 
     #Initialize node and publisher
     pub = rospy.Publisher('joint_states', JointState, queue_size=10)
-    odom_pub = rospy.Publisher('odom', Odometry, queue_size=50)
+    rospy.Subscriber("ackerman_control/odom", Odometry, callback_odom)
     rospy.init_node('racecar_joint_state')
     rate = rospy.Rate(10) # 10hz
-
-
-
-    x = 0.0
-    y = 0.0
-    th = 0.0
-
-    vx = 0.1
-    vy = -0.1
-    vth = 0.1
-
-
-    
-    current_time = rospy.Time()
-    last_time = rospy.Time()
 
 
     #Create joint state message
@@ -67,9 +57,10 @@ def talker():
     while not rospy.is_shutdown():
 
 
-        rospy.Subscriber("ackerman_control/cmd_vel", Twist, callback_cmd)
+        rospy.Subscriber("/cmd_vel", Twist, callback_cmd)
+        
 
-        #Pubblish joint state for Rviz
+        #Publish joint state for Rviz
         joint.header.stamp = rospy.Time.now()
         joint.position = [front_rot, rear_vel, front_rot, rear_vel,  rear_vel, rear_vel]
         pub.publish(joint)

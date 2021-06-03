@@ -5,13 +5,14 @@
 <!-- these are the arguments you can pass this launch file, for example paused:=true -->
 <arg name="paused" default="true"/>
 <arg name="use_sim_time" default="true"/>
-<arg name="gui" default="true"/>
+<arg name="gui" default="false"/>
 <arg name="headless" default="false"/>
 <arg name="debug" default="false"/>
 <arg name="model" default="$(find jetson_racer)/urdf/jetracer.xacro"/>
 <!-- We resume the logic in empty_world.launch -->
 
 <include file="$(find gazebo_ros)/launch/empty_world.launch">
+<arg name="gui" default="false"/>
 </include>
 
 <!-- Load the URDF into the ROS Parameter Server -->
@@ -34,4 +35,5 @@ args="ackerman_control"/>
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find jetson_racer)/rviz/jetracer.rviz"/>
     
     <node name="joint_state_publisher" pkg="jetson_racer" type="joint_state.py"/>
+    <remap from="/ackerman_control/cmd_vel" to="/cmd_vel"/>
 </launch>
