@@ -12,15 +12,7 @@ import math
 rear_vel = 0
 front_rot = 0
 
-# #Throttle
-# def callback_throttle(throt):
-#     global rear_vel
-#     rear_vel = rear_vel + throt.data*0.01
 
-# #Steering
-# def callback_steering(steer):
-#     global front_rot
-#     front_rot = steer.data*-0.4
 
 def callback_cmd(cmd):
     global front_rot
@@ -57,10 +49,9 @@ def talker():
     while not rospy.is_shutdown():
 
 
-        rospy.Subscriber("/cmd_vel", Twist, callback_cmd)
-        
+        rospy.Subscriber("ackerman_control/cmd_vel", Twist, callback_cmd)
 
-        #Publish joint state for Rviz
+        #Pubblish joint state for Rviz
         joint.header.stamp = rospy.Time.now()
         joint.position = [front_rot, rear_vel, front_rot, rear_vel,  rear_vel, rear_vel]
         pub.publish(joint)

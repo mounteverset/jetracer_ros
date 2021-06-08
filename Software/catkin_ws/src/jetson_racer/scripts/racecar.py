@@ -10,10 +10,12 @@ from nav_msgs.msg import Odometry
 #Initialize car variable and tune settings
 car = NvidiaRacecar()
 car.steering_gain = 0.65
-car.steering_offset = -0.16
+car.steering_offset = 0.05 #-0.16
 car.throttle_gain = 1
 car.steering = 0.0
 car.throttle = 0.0
+front_rot = 0
+rear_vel = 0
 
 # #Throttle
 # def callback_throttle(throt):
@@ -25,15 +27,16 @@ car.throttle = 0.0
 #     car.steering = steer.data
 #     rospy.loginfo("Steering: %s", str(steer.data))
 
-#Throttle and Steering read from Twist Msg
 def callback_cmd(cmd):
-    car.throttle = cmd.linear.x
+    global front_rot
+    global rear_vel
+    front_rot = cmd.linear.x
     car.steering = cmd.angular.z
 
-#Odometry readings added on top of Throttle to keep the wheels moving while having drastic velocity changes (otherwise instant halt)
 def callback_odom(odom):
-    car.throttle = car.throttle + odom.twist.twist.linear.x #vielleicht hier ein fehler?
-    car.steering = odom.twist.twist.angular.z
+
+    car.throttle = -(odom.twist.twist.linear.x)
+    #car.steering = odom.twist.twist.angular.z
 
 #Setup node and topics subscription
 def racecar():

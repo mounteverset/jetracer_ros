@@ -1,3 +1,14 @@
+generic_hw_control_loop:
+  loop_hz: 300
+  cycle_time_error_threshold: 0.01
+
+# Settings for ros_control hardware interface
+hardware_interface:
+   joints:
+      - rear_wheel_joint
+      - front_steer_joint
+   sim_control_mode: 0 # 0: position, 1: velocity
+
 ackerman_control:
   type        : "ackermann_steering_controller/AckermannSteeringController"
   rear_wheel: 'rear_wheel_joint'
