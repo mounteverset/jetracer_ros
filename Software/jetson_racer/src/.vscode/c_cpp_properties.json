@@ -1,0 +1,38 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/umut/ws_moveit/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/umut/ws_moveit/src/codeexamples/include/**",
+        "/home/umut/ws_moveit/src/Universal_Robots_ROS_Driver/controller_stopper/include/**",
+        "/home/umut/ws_moveit/src/descartes/descartes_core/include/**",
+        "/home/umut/ws_moveit/src/descartes/descartes_moveit/include/**",
+        "/home/umut/ws_moveit/src/descartes/descartes_planner/include/**",
+        "/home/umut/ws_moveit/src/descartes/descartes_tests/include/**",
+        "/home/umut/ws_moveit/src/descartes/descartes_trajectory/include/**",
+        "/home/umut/ws_moveit/src/descartes/descartes_utilities/include/**",
+        "/home/umut/ws_moveit/src/team6/FanucRobot/fanuc_driver/include/**",
+        "/home/umut/ws_moveit/src/team6/FanucRobot/industrial_core/industrial_robot_client/include/**",
+        "/home/umut/ws_moveit/src/team6/FanucRobot/industrial_core/industrial_utils/include/**",
+        "/home/umut/ws_moveit/src/fermi/moveit_cartesian_plan_plugin/include/**",
+        "/home/umut/ws_moveit/src/realsense-ros/realsense2_camera/include/**",
+        "/home/umut/ws_moveit/src/team6/FanucRobot/industrial_core/simple_message/include/**",
+        "/home/umut/ws_moveit/src/stomp_ros/stomp_core/include/**",
+        "/home/umut/ws_moveit/src/stomp_ros/stomp_moveit/include/**",
+        "/home/umut/ws_moveit/src/stomp_ros/stomp_plugins/include/**",
+        "/home/umut/ws_moveit/src/Universal_Robots_ROS_Driver/ur_calibration/include/**",
+        "/home/umut/ws_moveit/src/Universal_Robots_ROS_Driver/ur_controllers/include/**",
+        "/home/umut/ws_moveit/src/fmauch_universal_robot/ur_kinematics/include/**",
+        "/home/umut/ws_moveit/src/Universal_Robots_ROS_Driver/ur_robot_driver/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}
