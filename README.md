@@ -5,6 +5,41 @@ Grundsätzlich im Master Branch einchecken
 
 # Installation
 
+#### Installation der Software
+
+Da wir ROS Melodic auf Ubuntu 18.04 benutzen, verweisen wir zur Installation von ROS auf das Wiki, welches eine sehr ausführliche Einleitung zur Installation und Anwendung beinhaltet: http://wiki.ros.org/ROS/Installation Wir empfehlen die version "ros-melodic-full-desktop"
+
+#### Installation der benötigten Pakete
+
+Nach dem ROS installiert wurde, müssen einige Pakete, falls nicht vorhanden, nachinstalliert werden:
+
+##### ROS Navigation (AMCL zur Lokalisierung eingebunden):
+
+`sudo apt install ros-melodic-navigation`
+
+`sudo apt install ros-melodic-nav2d`
+
+Mit diesen Paketen wird die Steuerung des Roboters erst möglich. 
+
+##### Gmapping zur Erstellung der Map/Karte in RViz
+
+`sudo apt install ros-melodic-gmapping`
+
+##### Anbinden des LiDARs:
+
+`sudo apt install ros-melodic-rplidar-ros`
+
+##### Anbinden der Intel Realsense und Konvertierung von Tiefendaten in laserscan:
+
+`sudo apt install ros-melodic-librealsense2`
+
+`sudo apt install ros-melodic-depthimage-to-laserscan`
+
+##### OpenCV in Verbindung mit ROS:
+
+`sudo apt install ros-melodic-cv-bridge`
+
+
 
 # Benutzung
 
@@ -33,4 +68,10 @@ Tastatursteuerung ist auch möglich. Dafür muss, anstelle des obigen Commands, 
 Um die Farb- und Tiefenkamera (die Intel Realsense) zu starten muss in einem neuen Terminal folgendes eingegeben werden:
 
 `roslaunch realsense2_camera rs_camera.launch`
+
+#### Starten des LiDARs
+
+Um den Laserscanner zu starten und mit ROS zu verbinden muss folgender Befehl im Terminal ausgeführt werden:
+
+`roslaunch rplidar_ros view_rplidar.launch`
 
