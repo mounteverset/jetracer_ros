@@ -9,9 +9,90 @@ Grundsätzlich im Master Branch einchecken
 
 Da wir ROS Melodic auf Ubuntu 18.04 benutzen, verweisen wir zur Installation von ROS auf das Wiki, welches eine sehr ausführliche Einleitung zur Installation und Anwendung beinhaltet: http://wiki.ros.org/ROS/Installation Wir empfehlen die version "ros-melodic-full-desktop"
 
-#### Installation der benötigten Pakete
+Ubuntu 18.04 ist das Betriebssystem des Nvidia Jetpack Images welches wir verwenden. Das Image ist speziell für die Verwendung mit einem Jetson Nano entwickelt worden.
+
+#### Setup des Jetracers
+
+##### Erstellung des SD Karten Images
+- Mindestgröße der SD-Karte muss 64GB sein 
+- Mindestgeschwindigkeit der SD-Karte sollte mind. Klasse 10 sein
+
+1. Download JetRacer Image von Nvidia: [Image](https://drive.google.com/open?id=1wXD1CwtxiH5Mz4uSmIZ76fd78zDQltW_)
+2. SD-Karte mittels Balena Etcher Software mit dem Nvidia Image beschreiben
+
+##### Starten des Jetson Nano
+- Der SD Karten-Slot befindet sich auf der Unterseite des Jetson Nano
+- Die initale Einrichtung kann über die Verbindung mit USB oder per angeschlossener Peripherie geschehen (Bildschirm, Tastatur, Maus)
+
+- USB-Verbindung folgendermaßen:
+  1. `192.168.55.1:8888` im Browser aufrufen
+  2. Passwort: "jetson"
+ 
+- Neuen Terminal öffnen
+- Mit einem Wifi Netzwerk verbinden mit dem Befehl:
+
+
+    `sudo nmcli device wifi list`
+
+    `sudo nmcli device wifi connect <ssid_name> password <password>`
+
+#### Installation Nvidia & Waveshare Pakete
+
+
+##### Update Jetcard Python
+```
+cd 
+sudo mkdir ws
+cd ws
+sudo git clone https://github.com/waveshare/jetcard
+sudo cp jetcard/jetcard/ads1115.py ~/jetcard/jetcard/
+sudo cp jetcard/jetcard/ina219.py ~/jetcard/jetcard/
+sudo cp jetcard/jetcard/display_server.py ~/jetcard/jetcard/
+sudo cp jetcard/jetcard/stats.py ~/jetcard/jetcard/
+cd ~/jetcard
+sudo pip3 uninstall jetcard -y
+sudo reboot  #reboot and then install
+cd ~/jetcard
+sudo python3 setup.py install
+```
+
+##### Installation JetCam Python
+
+```
+cd 
+sudo git clone https://github.com/NVIDIA-AI-IOT/jetcam
+cd jetcam
+sudo python3 setup.py install
+```
+
+##### Installation torch2trt Python Package
+
+```
+cd 
+git clone https://github.com/NVIDIA-AI-IOT/torch2trt
+cd torch2trt
+sudo python3 setup.py install
+```
+
+##### Installation JetRacer Package
+
+```
+cd
+git clone https://github.com/waveshare/jetracer
+cd jetracer
+sudo python3 setup.py install
+```
+
+##### Power Mode wechseln 
+
+`sudo nvpmodel -m1`
+
+#### Installation der benötigten ROS-Pakete
 
 Nach dem ROS installiert wurde, müssen einige Pakete, falls nicht vorhanden, nachinstalliert werden:
+Die Liste der installierten Pakete kann mit dem Befehl 
+`rospack list`
+überprüft werden. (Wichtig: Der aktuelle Workspace und die ROS-Installation müssen gesourced werden, siehe ROS Installation)
 
 ##### ROS Navigation (AMCL zur Lokalisierung eingebunden):
 
@@ -40,38 +121,51 @@ Mit diesen Paketen wird die Steuerung des Roboters erst möglich.
 `sudo apt install ros-melodic-cv-bridge`
 
 
-
 # Benutzung
 
 #### Verbinden des Jetson Racers mit ROS
 
 Um den Jetson Racer zu starten, muss der kleine Schalter am Waveshare- Board betätigt werden. Damit der Jetson Racer über ROS gesteuert werden kann, müssen erstmal einige Nodes (Skripte im scripts-Ordner) gestartet werden.
 
-Um die ROS Controller und die Visualisierung (RViz) zu starten muss folgende Zeile im Terminal ausgeführt werden:
+Um eine Verbindung zum Jetson-Board herzustellen muss sich der Jetson in ein WLAN Netzwerk einwählen. Dies sollte zu Beginn einmalig erledigt werden, indem man Bildschirm, Maus und Tastatur anschließt.
+Nachdem der Jetson die Verbindung hergestellt hat kann die zugewiesene IPv4 Adresse vom Status LED Display auf der Rückseite des Jetson abgelesen werden. 
+Die Verbindung zum Jetson erfolgt über SSH (Secure Shell) mit dem Befehl:
 
-`roslaunch jetson_racer gazebo.launch`
+`ssh jetson@[IP-Adresse]`
+
+`Passwort: "jetson"`
+
+Nun kann man über den Terminal die benötigten ROS Launch Files auf dem Jetson starten. Anzumerken ist, dass im Augenblick mehrere Terminals erstellt werden müssen. D.h. man verbindet sich jedes mal erneut in einem neuen Terminal über SSH mit dem Jetson.
+
+Um ROS Funktionalitäten nutzen zu können, muss die zentrale ROS Instanz "roscore" gestartet werden, welche primär die Registrierung der Publisher/Subscriber auf verschiedenen Topics und der Service/Action Server ausführt.
+
+_Terminal 1:_ `roscore`
+
+Um die ROS Controller und die Visualisierung (RViz) zu starten muss folgende Zeile ausgeführt werden:
+
+_Terminal 2:_ `roslaunch jetson_racer gazebo.launch`
 
 Anschließend wird der Controller mit der Hardware über folgenden Command verbunden:
 
-`rosrun jetson_racer racecar.py`
+_Terminal 3:_ `rosrun jetson_racer racecar.py`
 
 Jetzt ist es schon möglich, den Jetson Racer über /cmd_vel messages zu steuern. Um den Jetson Racer mit einem GamePad zu steuern, muss in einem neuen Terminal folgende Node gestartet werden. Davor sollte das GamePad jedoch an den Jetson Nano angeschlossen werden. Dies geschieht über den "on"- Button auf der Unterseite des GamePads und über Bluetooth:
 
-`rosrun jetson_racer teleop_gamepad.py`
+_Terminal 4:_ `rosrun jetson_racer teleop_gamepad.py`
 
 Tastatursteuerung ist auch möglich. Dafür muss, anstelle des obigen Commands, folgender ausgeführt werden:
 
-`rosrun jetson_racer teleop.py`
+_Alternative Terminal 4:_`rosrun jetson_racer teleop.py`
 
 #### Starten der Intel Realsense
 
-Um die Farb- und Tiefenkamera (die Intel Realsense) zu starten muss in einem neuen Terminal folgendes eingegeben werden:
+Um die Farb- und Tiefenkamera (die Intel Realsense) zu starten muss in einem neuen Terminal  folgendes eingegeben werden:
 
-`roslaunch realsense2_camera rs_camera.launch`
+_Terminal 5:_ `roslaunch realsense2_camera rs_camera.launch`
 
 #### Starten des LiDARs
 
 Um den Laserscanner zu starten und mit ROS zu verbinden muss folgender Befehl im Terminal ausgeführt werden:
 
-`roslaunch rplidar_ros view_rplidar.launch`
+_Terminal 6:_ `roslaunch rplidar_ros view_rplidar.launch`
 
