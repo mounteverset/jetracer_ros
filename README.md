@@ -1,8 +1,11 @@
 # Fennec Jet Racer
-Bitte alle Unterlagen bzw Code entsprechend der vorgegebenen Struktur ablegen.
-Grundsätzlich im Master Branch einchecken
+#### Teammitglieder
+- Umut Uzunoglu
+- Hien Anh Ngyuen Manh 
+- Son Khue Ngyuen 
+- Lukas Evers
 
-Videopräsentation Sprint 1: [Youtube](https://youtu.be/tqEe7d1nCfg)
+## Videopräsentation Sprint 1: [Youtube](https://youtu.be/tqEe7d1nCfg)
 
 
 # Installation
