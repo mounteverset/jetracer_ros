@@ -1,9 +1,4 @@
 <launch>
-<node name="depthimage_to_laserscan" pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" > 
-  <remap from="image" to="/camera/depth/image_rect_raw"/>
-
-</node>
-
 
   <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
   <param name="serial_port"         type="string" value="/dev/ttyUSB0"/>
