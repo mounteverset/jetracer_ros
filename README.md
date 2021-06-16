@@ -181,7 +181,7 @@ Nun starten wir SLAM- Gmapping, diese Node wird bis zum Starten der LiDAR nichts
 
 _Terminal 5:_ `rosrun gmapping slam_gmapping scan:=scan`
 
-Schließlich kann auch der Kern des Navigation Stacks gestartet werden, der die Planung und Object Avoidance übernimmt:
+Schließlich kann auch der Kern des Navigation Stacks gestartet werden:
 
 _Terminal 6:_ `roslaunch jetson_racer move_base.launch`
 
