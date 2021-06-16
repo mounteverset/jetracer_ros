@@ -169,3 +169,21 @@ Um den Laserscanner zu starten und mit ROS zu verbinden muss folgender Befehl im
 
 _Terminal 6:_ `roslaunch rplidar_ros view_rplidar.launch`
 
+#### Starten des Navigation Stacks
+
+Da die Steuerung des Fennecs über ROS Navigation erfolgen kann, sind die Schritte von Terminal 4 bis Terminal 6 nicht mehr nötig. Dafür müssen wir aber ROS Navigation ausführen:
+
+Nachdem RViz gestartet wurde, wird der Laserscanner über folgenden Befehl gestartet. Dabei wird auch AMCL mitgestartet.
+
+_Terminal 4:_ `roslaunch realsense2_camera amcl_lidar.launch`
+
+Nun starten wir SLAM- Gmapping, diese Node wird bis zum Starten der LiDAR nichts machen, da sie noch auf Scandaten wartet.
+
+_Terminal 5:_ `rosrun gmapping slam_gmapping scan:=scan`
+
+Schließlich kann auch der Kern des Navigation Stacks gestartet werden, der die Planung und Object Avoidance übernimmt:
+
+_Terminal 6:_ `roslaunch jetson_racer move_base.launch`
+
+
+In Rviz, oben auf der Toolbar, kann man auf "2d Nav Goal" klicken und eine Pose dem Navigation Stack übergeben, der daraufhin einen Pfad hin plant und auch ausführt. Einige Parameter müssen noch genauer betrachtet und "fine tuned" werden.
