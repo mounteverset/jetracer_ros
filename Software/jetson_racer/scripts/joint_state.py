@@ -13,7 +13,6 @@ rear_vel = 0
 front_rot = 0
 
 
-
 def callback_cmd(cmd):
     global front_rot
     global rear_vel

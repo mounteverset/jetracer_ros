@@ -6,7 +6,7 @@
 <arg name="paused" default="true"/>
 <arg name="use_sim_time" default="true"/>
 <arg name="gui" default="false"/>
-<arg name="headless" default="false"/>
+<arg name="headless" default="true"/>
 <arg name="debug" default="false"/>
 <arg name="model" default="$(find jetson_racer)/urdf/jetracer.xacro"/>
 <!-- We resume the logic in empty_world.launch -->
