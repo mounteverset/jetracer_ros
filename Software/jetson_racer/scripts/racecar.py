@@ -1,50 +1,70 @@
 #!/usr/bin/env python3
 
-from joint_state import callback_cmd
-import rospy
+import rospy, math
 from jetracer.nvidia_racecar import NvidiaRacecar
 from std_msgs.msg import Float32
 from geometry_msgs.msg import Twist, TwistStamped
 from nav_msgs.msg import Odometry
+#from ackerman_msgs.msg import AckermanDrive, AckermanDriveStamped
 
-#Initialize car variable and tune settings
 car = NvidiaRacecar()
 car.steering_gain = 0.65
-car.steering_offset = 0.05 #-0.16
+car.steering_offset = 0.12
 car.throttle_gain = 1
 car.steering = 0.0
 car.throttle = 0.0
-front_rot = 0
-rear_vel = 0
 
-# #Throttle
-# def callback_throttle(throt):
-#     car.throttle = throt.data
-#     rospy.loginfo("Throttle: %s", str(throt.data))
+def convert_rotational_vel_to_steering_angle(v, omega, wheelbase):
+    if v == 0 or omega == 0:
+        return 0
+    
+    radius = v / omega
+    return math.atan(wheelbase/radius)
 
-# #Steering
-# def callback_steering(steer):
-#     car.steering = steer.data
-#     rospy.loginfo("Steering: %s", str(steer.data))
+def callback_cmd_vel(cmd_vel):
+    speed = cmd_vel.linear.x
+    steering = convert_rotational_vel_to_steering_angle(speed, cmd_vel.angular.z, 30)
 
-def callback_cmd(cmd):
-    global front_rot
-    global rear_vel
-    front_rot = cmd.linear.x
-    car.steering = cmd.angular.z
+    if speed > 1:
+        car.throttle = 1.0
+    elif speed < -1:
+        car.throttle = -1.0
+    else:
+        car.throttle = speed
 
-def callback_odom(odom):
+    if steering > 1:
+        car.steering = 1.0
+    elif steering < -1:
+        car.steering = -1.0
+    else:
+        car.steering = steering
 
-    car.throttle = -(odom.twist.twist.linear.x)
-    #car.steering = odom.twist.twist.angular.z
+def throttle_callback(data):
+    if data.data > 1:
+        car.throttle = 1.0
+    elif data.data < -1:
+        car.throttle = -1.0
+    else:
+        car.throttle = data.data
+
+def steering_callback(data):
+    if data.data > 1:
+        car.steering = 1.0
+    elif data.data < -1:
+        car.steering = -1.0
+    else:
+        car.steering = data.data  
 
 #Setup node and topics subscription
 def racecar():
     rospy.init_node('racecar', anonymous=True)
     #rospy.Subscriber("throttle", Float32, callback_throttle)
     #rospy.Subscriber("steering", Float32, callback_steering)
-    rospy.Subscriber("ackerman_control/cmd_vel", Twist, callback_cmd)
-    rospy.Subscriber("ackerman_control/odom", Odometry, callback_odom)
+    rospy.Subscriber("cmd_vel", Twist, callback_cmd_vel)
+    rospy.Subscriber("throttle", Float32, throttle_callback, queue_size=1)
+    rospy.Subscriber("steering", Float32, steering_callback, queue_size=1)
+    
+    #rospy.Subscriber("ackerman_control/odom", Odometry, callback_odom)
 
     rospy.spin()
 
