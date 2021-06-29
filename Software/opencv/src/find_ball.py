@@ -130,23 +130,23 @@ class BlobDetector:
             fps = 1.0/(time.time()-self._t0)
             self._t0 = time.time()
             
-def main(args):
-    blue_min = (101,211,64)
-    blue_max = (255, 255, 255) 
+def main(args):     
+    blue_min = (102,103,38)
+    blue_max = (119, 255, 255) 
     # blue_min = (82,31,62)
     # blue_max = (106, 116, 193)     
     # blue_min = (55,40,0)
     # blue_max = (150, 255, 255)     
     
     blur     = 5
-    min_size = 10
-    max_size = 40
+    min_size = 40
+    max_size = 100
     
     #--- detection window respect to camera frame in [x_min, y_min, x_max, y_max] adimensional (0 to 1)
-    x_min   = 0
-    x_max   = 1
-    y_min   = 0
-    y_max   = 1
+    x_min   = 0.1
+    x_max   = 0.9
+    y_min   = 0.1
+    y_max   = 0.9
     
     detection_window = [x_min, y_min, x_max, y_max]
     
@@ -158,7 +158,7 @@ def main(args):
      
     # Filter by Area.
     params.filterByArea = True
-    params.minArea = 20
+    params.minArea = 2000
     params.maxArea = 20000
      
     # Filter by Circularity
