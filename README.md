@@ -192,3 +192,29 @@ _Terminal 6:_ `roslaunch jetson_racer move_base.launch`
 
 
 In Rviz, oben auf der Toolbar, kann man auf "2d Nav Goal" klicken und eine Pose dem Navigation Stack übergeben, der daraufhin einen Pfad hin plant und auch ausführt. Einige Parameter müssen noch genauer betrachtet und "fine tuned" werden.
+
+#### Starten der Ballverfolgung
+
+Wichtig bei der Ballverfolgung ist, dass der Ball erkannt wird, dass die Koordinaten des erkannten Balles im /cmd_vel Topic als Twist Messages umgewandelt wird und dass diese Messages auch an der Hardware ankommen. Zur Ballerkennung muss noch die Kamera gestartet werden. Mit der ROS Instanz zusammen brauchen wir insgesamt 5 Terminals, wobei im späteren Verlauf des Projektes einige zusammengefasst werden. So ist es leichter, Fehler beim Starten zu identifizieren. 
+
+Das erste Terminal soll nur unsere ROS Instanz aufrufen. Nicht genauer spezifizierte Terminals können auch über das Multiple Machines Setup vom Laptop/PC aus aufgerufen werden. Dadurch spart man Ressourcen auf dem Racer, jedoch könnte die dadurch entstandene Latenz die Übertragung der Messages negativ beeinflussen. 
+
+_Terminal 1:_ `roscore`
+
+Auf dem Fennec wird die Übergabe von Twist Messages an Hardware gestartet:
+
+_Terminal 2:_ `rosrun jetson_racer racecar.py`
+
+Außerdem muss auf dem Fennec auch die Kamera gestartet werden, da sie direkt am Fennec angeschlossen wird:
+
+_Terminal 3:_ `roslaunch realsense2_camera rs_camera.launch`
+
+Nun starten wir die Ballerkennung:
+
+_Terminal 4:_ `rosrun opencv find_ball.py`
+
+Und schließlich wird die Verfolgung gestartet:
+
+_Terminal 5:_ `rosrun opencv chase.py
+
+Wenn jetzt ein blauer Ball vor der Kamera gehalten wird, wird sich der Fennec zum Ball bewegen und entsprechend auch korrigieren.
