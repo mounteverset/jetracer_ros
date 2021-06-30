@@ -7,6 +7,8 @@
 
 ## Videopräsentation Sprint 1: [Youtube](https://youtu.be/tqEe7d1nCfg)
 
+## Powerpoint-Präsentation Sprint 2: [Google Docs](https://drive.google.com/file/d/15EYwAGZ4gDesyfAvPCeXksNx87YFiDXL/view?usp=sharing)
+
 
 # Installation
 
