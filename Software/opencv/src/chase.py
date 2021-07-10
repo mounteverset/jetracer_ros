@@ -29,7 +29,7 @@ class ChaseBall():
         self.sub_center = rospy.Subscriber("/blob/point_blob", Point, self.update_ball)
         rospy.loginfo("Subscribers set")
         
-        self.pub_twist = rospy.Publisher("cmd_vel", Twist, queue_size=5)
+        self.pub_twist = rospy.Publisher("ackerman_control/cmd_vel", Twist, queue_size=5)
         rospy.loginfo("Publisher set")
         
         self._message = Twist()
@@ -59,9 +59,9 @@ class ChaseBall():
         if self.is_detected:
             #--- Apply steering, proportional to how close is the object
             steer_action   =-K_LAT_DIST_TO_STEER*self.blob_x
-            steer_action   = saturate(steer_action, 0.3, -0.3)
+            steer_action   = saturate(steer_action, -1.5, 1.5)
             rospy.loginfo("Steering command %.2f"%steer_action) 
-            throttle_action = -0.27
+            throttle_action = 1.0 
             
         return (steer_action, throttle_action)
         
@@ -78,7 +78,7 @@ class ChaseBall():
             
             #-- update the message
             self._message.linear.x  = throttle_action
-            self._message.angular.z = -steer_action
+            self._message.angular.z = steer_action
             
             #-- publish it
             self.pub_twist.publish(self._message)
@@ -89,6 +89,6 @@ if __name__ == "__main__":
 
     rospy.init_node('chase_ball')
     
-    chase_ball = ChaseBall()
+    chase_ball     = ChaseBall()
     chase_ball.run()            
 
