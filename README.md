@@ -127,6 +127,23 @@ Mit diesen Paketen wird die Steuerung des Roboters erst möglich.
 
 `sudo apt install ros-melodic-cv-bridge`
 
+#### Erstellen eines Catkin Workspaces
+
+```
+cd
+mkdir fennec_ws
+cd ~/fennec_ws
+mkdir src
+cd src
+git clone THIS REPO TO DO: link einfügen
+To Do: git clone navigtion, rplidar, gmapping, etc..
+cd ~/fennec_ws
+sudo apt-get install python-rosdep
+sudo rosdep init
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y
+catkin_make (Dauer 5-10 Minuten)
+```
 
 # Benutzung
 
