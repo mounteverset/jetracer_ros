@@ -168,8 +168,8 @@ catkin_install_python(PROGRAMS
   scripts/teleop.py
   scripts/teleop_gamepad.py
   scripts/camera.py
+  scripts/linefollower.py
   scripts/joint_state.py
-  scripts/cmd_vel_tester.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
