@@ -46,5 +46,6 @@
 </node>
 
 <node pkg="tf" type="static_transform_publisher" name="camera_tf" args="0 0 0 0 0 0 1 base_link camera_depth_frame 100" />
+<node pkg="tf" type="static_transform_publisher" name="laser_frame" args="0 0 0 0 0 0 1 base_link base_laser 100" />
 
 </launch>

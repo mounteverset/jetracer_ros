@@ -1,8 +1,5 @@
 <launch>
 
-   <remap from="cmd_vel" to="ackerman_control/cmd_vel"/>
-   <remap from="/odom" to="ackerman_control/odom"/>
-
 
    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <rosparam file="$(find jetson_racer)/config/costmap_common_params.yaml" command="load" ns="global_costmap" /> 

@@ -144,7 +144,6 @@ from std_msgs.msg import Float32
 def callback_teleop(data):
 
     print("I heard sth...")
-
     throttle_axes = 1 # left analog stick, up and down
     steering_axes = 2 # right analog stick, left == 1.0, right == -1.0
     deadman_switch = 4 # L1 has to be pressed at all times
