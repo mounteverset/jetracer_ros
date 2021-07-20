@@ -129,12 +129,12 @@ class Jetracer():
 
         print("Steering command send to Jetracer: {0}".format(steering_command))
 
-        if speed > 1:
-            self.car.throttle = 1.0
-        elif speed < -1:
-            self.car.throttle = -1.0
-        else:
-            self.car.throttle = speed
+    if speed > 1:
+        car.throttle = 1.0
+    elif speed < -1:
+        car.throttle = -1.0
+    else:
+        car.throttle = speed
 
         if steering_command > 1:
             self.car.steering = 1.0
@@ -145,21 +145,21 @@ class Jetracer():
 
         self.angular_vel = (self.car.throttle * math.tan(steering_angle)) / self.wheelbase  
 
-    def throttle_callback(self, data):
-        if data.data > 1:
-            self.car.throttle = 1.0
-        elif data.data < -1:
-            self.car.throttle = -1.0
-        else:
-            self.car.throttle = data.data
+def throttle_callback(data):
+    if data.data > 1:
+        car.throttle = 1.0
+    elif data.data < -1:
+        car.throttle = -1.0
+    else:
+        car.throttle = data.data
 
-    def steering_callback(self, data):
-        if data.data > 1:
-            self.car.steering = 1.0
-        elif data.data < -1:
-            self.car.steering = -1.0
-        else:
-            self.car.steering = data.data  
+def steering_callback(data):
+    if data.data > 1:
+        car.steering = 1.0
+    elif data.data < -1:
+        car.steering = -1.0
+    else:
+        car.steering = data.data  
 
     #Setup node and topics subscription
     def racecar_node(self):

@@ -68,7 +68,7 @@ class ChaseBall():
             steer_action   = -K_LAT_DIST_TO_STEER*self.blob_x
             steer_action   = saturate(steer_action, 1.0, -1.0)
             rospy.loginfo("Steering command %.2f"%steer_action) 
-            throttle_action = -0.27
+            throttle_action = 1.0 
             
         return (steer_action, throttle_action)
         
@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
     rospy.init_node('chase_ball')
     
-    chase_ball = ChaseBall()
+    chase_ball     = ChaseBall()
     chase_ball.run()            
 
 
