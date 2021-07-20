@@ -35,4 +35,7 @@ args="ackerman_control"/>
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find jetson_racer)/rviz/jetracer.rviz"/>
     
     <node name="joint_state_publisher" pkg="jetson_racer" type="joint_state.py"/>
+
+<remap from="/ackerman_control/cmd_vel" to="/cmd_vel"/>
+<remap from="/ackerman_control/odom" to="/odom"/>
 </launch>

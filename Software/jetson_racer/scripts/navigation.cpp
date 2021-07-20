@@ -12,9 +12,9 @@
 
 void valueCallback(geometry_msgs::Twist msg){
 
-    x += msg.linear.x*0.05;
+    x += msg.linear.x;
     //hier ist der fehler, links rechts commands addieren immer weiter rauf.
-    y+=msg.angular.z*0.5;
+    y+=msg.angular.z;
 
 }
 
