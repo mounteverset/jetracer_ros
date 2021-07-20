@@ -59,6 +59,7 @@ class BlobDetector:
         self.mask_pub = rospy.Publisher("/blob/image_mask",Image,queue_size=1)
         print (">> Publishing position to topic point_blob")
         self.blob_pub  = rospy.Publisher("/blob/point_blob",Point,queue_size=1)
+        self.
 
         self.bridge = CvBridge()
         self.image_sub = rospy.Subscriber("/camera/color/image_raw",Image,self.callback)
@@ -111,6 +112,10 @@ class BlobDetector:
             except CvBridgeError as e:
                 print(e)            
 
+
+            # Vorschlag order by keypoint.size -> dann nur den ersten nehmen weil das der größte ist
+            # Vorschlag mindestgroesse fuer s festlegen, dass dieses random erkennen nicht stattfindet
+            
             for i, keyPoint in enumerate(keypoints):
                 #--- Here you can implement some tracking algorithm to filter multiple detections
                 #--- We are simply getting the first result

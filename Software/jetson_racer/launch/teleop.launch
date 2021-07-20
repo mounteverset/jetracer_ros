@@ -1,0 +1,4 @@
+<launch>
+    <node name="teleop_gamepad" pkg="jetson_racer" type="teleop_gamepad.py"/>
+    <node name="joy" pkg="joy" type="joy_node"/>
+</launch>

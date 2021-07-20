@@ -32,7 +32,7 @@ def talker():
 
     #Initialize node and publisher
     pub = rospy.Publisher('joint_states', JointState, queue_size=10)
-    rospy.Subscriber("ackerman_control/odom", Odometry, callback_odom)
+    rospy.Subscriber("/odom", Odometry, callback_odom)
     rospy.init_node('racecar_joint_state')
     rate = rospy.Rate(10) # 10hz
 

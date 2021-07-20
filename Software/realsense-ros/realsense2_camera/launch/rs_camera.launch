@@ -25,7 +25,7 @@
   <arg name="color_height"        default="480"/>
   <arg name="enable_color"        default="true"/>
 
-  <arg name="fisheye_fps"         default="30"/>
+  <arg name="fisheye_fps"         default="15"/>
   <arg name="depth_fps"           default="30"/>
   <arg name="infra_fps"           default="30"/>
   <arg name="color_fps"           default="30"/>
@@ -110,4 +110,5 @@
       <arg name="allow_no_texture_points"  value="$(arg allow_no_texture_points)"/>
     </include>
   </group>
+  
 </launch>
