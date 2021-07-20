@@ -1,2 +1,15 @@
 
 Konstruktion/OldVersions/
+.vscode/c_cpp_properties.json
+.vscode/settings.json
+Software/.vscode/c_cpp_properties.json
+Software/.vscode/settings.json
+Software/opencv/include/__init__.pyc
+Software/opencv/include/blob_detector.pyc
+Software/opencv/include/__pycache__/__init__.cpython-36.pyc
+Software/opencv/include/__pycache__/blob_detector.cpython-36.pyc
+Software/opencv/src/goal_position_publisher.py
+Software/opencv/src/.vscode/c_cpp_properties.json
+Software/realsense-ros/.vscode/c_cpp_properties.json
+Software/opencv/src/.vscode/settings.json
+Software/realsense-ros/.vscode/settings.json

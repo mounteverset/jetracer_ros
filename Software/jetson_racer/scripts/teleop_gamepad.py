@@ -127,6 +127,7 @@
 import rospy
 from sensor_msgs.msg import Joy
 from std_msgs.msg import Float32
+from geometry_msgs.msg import Twist
 
 # class teleop_gamepad():
 
@@ -155,6 +156,11 @@ def callback_teleop(data):
         steering_pub = rospy.Publisher("steering", Float32, queue_size=1) 
         throttle_pub.publish(data.axes[throttle_axes] * -1)
         steering_pub.publish(data.axes[steering_axes] * -1)
+        # cmd_vel_pub = rospy.Publisher("cmd_vel", Twist, queue_size=1)
+        # cmd_vel = Twist()
+        # cmd_vel.linear.x = data.axes[throttle_axes]
+        # cmd_vel.angular.z = data.axes[steering_axes] 
+        # cmd_vel_pub.publish(cmd_vel)
         
 
 def teleop():
@@ -163,14 +169,17 @@ def teleop():
     steering_axis = 0 # left analog stick, left == 1.0, right == -1.0
     deadman_switch = 4 # L1 has to be pressed at all times       
     rospy.Subscriber("joy", Joy, callback_teleop)
+    
     throttle_pub = rospy.Publisher("throttle", Float32, queue_size=1)
     steering_pub = rospy.Publisher("steering", Float32, queue_size=1)  
+    
+    rospy.spin()
+    
+    # while not rospy.is_shutdown():
 
-    while not rospy.is_shutdown():
-
-        rate = rospy.Rate(1000)
-        rate.sleep()
-
+    #     rate = rospy.Rate(1000)
+    #     rate.sleep()
+        # rospy.sleep(0.05)
 
 
 if __name__ == '__main__':

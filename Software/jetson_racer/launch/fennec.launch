@@ -1,0 +1,40 @@
+<launch>
+   <!--
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+      <rosparam file="$(find jetson_racer)/config/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
+      <rosparam file="$(find jetson_racer)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+      <rosparam file="$(find jetson_racer)/config/local_costmap_params.yaml" command="load" />
+      <rosparam file="$(find jetson_racer)/config/global_costmap_params.yaml" command="load" /> 
+      <rosparam file="$(find jetson_racer)/config/base_local_planner_params.yaml" command="load" />
+   </node>
+   -->
+
+   <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
+      <param name="serial_port"         type="string" value="/dev/ttyUSB0"/>
+      <param name="serial_baudrate"     type="int"    value="115200"/><!--A1/A2 -->
+      <!--param name="serial_baudrate"     type="int"    value="256000"--><!--A3 -->
+      <param name="frame_id"            type="string" value="base_laser"/>
+      <param name="inverted"            type="bool"   value="false"/>
+      <param name="angle_compensate"    type="bool"   value="true"/>
+   </node>
+
+   <node name="jetracer" pkg="jetson_racer"  type="racecar.py"></node>
+
+   <include file="$(find realsense2_camera)/launch/rs_camera.launch"></include>
+
+   <node pkg="tf" type="static_transform_publisher" name="camera_tf" args="0 0 0 0 0 0 1 base_link camera_link 100" />
+   <node pkg="tf" type="static_transform_publisher" name="laser_frame" args="0 0 0 0 0 0 1 base_link base_laser 100" />
+
+   <include file="$(find jetson_racer)/launch/ros_controllers.launch"></include>
+
+   <!-- <include file="$(find jetson_racer)/launch/amcl.launch"></include> -->
+
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find jetson_racer)/urdf/jetracer.xacro'"/>
+    <rosparam file= "$(find jetson_racer)/config/joints.yaml" command="load"/>
+    <!--<include file="$(find jetson_racer)/launch/ros_controllers.launch"></include>-->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"></node>
+    <node name="joint_state_publisher" pkg="jetson_racer" type="joint_state.py"></node>
+
+    
+
+</launch> 
