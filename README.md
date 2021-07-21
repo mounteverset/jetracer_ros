@@ -163,53 +163,36 @@ Die Verbindung zum Jetson erfolgt über SSH (Secure Shell) mit dem Befehl:
 
 Nun kann man über den Terminal die benötigten ROS Launch Files auf dem Jetson starten. Anzumerken ist, dass im Augenblick mehrere Terminals erstellt werden müssen. D.h. man verbindet sich jedes mal erneut in einem neuen Terminal über SSH mit dem Jetson.
 
-Um ROS Funktionalitäten nutzen zu können, muss die zentrale ROS Instanz "roscore" gestartet werden, welche primär die Registrierung der Publisher/Subscriber auf verschiedenen Topics und der Service/Action Server ausführt.
+Um ROS Funktionalitäten nutzen zu können, muss die zentrale ROS Instanz "roscore" gestartet werden, welche primär die Registrierung der Publisher/Subscriber auf verschiedenen Topics und der Service/Action Server ausführt. Es ist auch möglich sowohl Rviz als auch roscore über den eigenen Rechner zu starten. Dafür benötigen wir ROS Multiple Machines. Im ROS Wiki unter folgendem Link wird das ROS Multiple Machines Setup erklärt: https://wiki.ros.org/ROS/Tutorials/MultipleMachines
 
 _Terminal 1:_ `roscore`
 
-Um die ROS Controller und die Visualisierung (RViz) zu starten muss folgende Zeile ausgeführt werden:
+In einem neuen Terminal kann die Intel Realsense, der RP LiDAR Laserscanner, AMCL und die Hardwareansteuerung gleichzeitig mit folgendem Befehl gleichzeitig gestartet werden:
 
-_Terminal 2:_ `roslaunch jetson_racer gazebo.launch`
+_Terminal 2:_ `roslaunch jetson_racer fennec.launch`
 
-Anschließend wird der Controller mit der Hardware über folgenden Command verbunden:
+Jetzt ist es schon möglich, den Jetson Racer über /cmd_vel messages zu steuern. Außerdem kann jetzt SLAM Gmapping gestartet werden und rf2o_laser_odometry zur Bestimmung der Odometrie für ROS Navigation:
 
-_Terminal 3:_ `rosrun jetson_racer racecar.py`
+_Terminal 3:_ `roslaunch rf2o_laser_odometry rf2o_laser_odometry.launch`
 
-Jetzt ist es schon möglich, den Jetson Racer über /cmd_vel messages zu steuern. Um den Jetson Racer mit einem GamePad zu steuern, muss in einem neuen Terminal folgende Node gestartet werden. Davor sollte das GamePad jedoch an den Jetson Nano angeschlossen werden. Dies geschieht über den "on"- Button auf der Unterseite des GamePads und über Bluetooth:
+Um den Jetson Racer mit einem GamePad zu steuern, muss in einem neuen Terminal folgende Node gestartet werden. Davor sollte das GamePad jedoch an den Jetson Nano angeschlossen werden. Dies geschieht über den "on"- Button auf der Unterseite des GamePads und über Bluetooth:
 
-_Terminal 4:_ `rosrun jetson_racer teleop_gamepad.py`
+_Terminal 3:_ `rosrun jetson_racer teleop_gamepad.py`
 
 Tastatursteuerung ist auch möglich. Dafür muss, anstelle des obigen Commands, folgender ausgeführt werden:
 
 _Alternative Terminal 4:_`rosrun jetson_racer teleop.py`
 
-#### Starten der Intel Realsense
-
-Um die Farb- und Tiefenkamera (die Intel Realsense) zu starten muss in einem neuen Terminal  folgendes eingegeben werden:
-
-_Terminal 5:_ `roslaunch realsense2_camera rs_camera.launch`
-
-#### Starten des LiDARs
-
-Um den Laserscanner zu starten und mit ROS zu verbinden muss folgender Befehl im Terminal ausgeführt werden:
-
-_Terminal 6:_ `roslaunch rplidar_ros view_rplidar.launch`
 
 #### Starten des Navigation Stacks
 
-Da die Steuerung des Fennecs über ROS Navigation erfolgen kann, sind die Schritte von Terminal 4 bis Terminal 6 nicht mehr nötig. Dafür müssen wir aber ROS Navigation ausführen:
+Falls das Gamepad/die Tastatur nicht benutzt werden soll, wird hier mit Terminal 4 weitergeführt.
 
-Nachdem RViz gestartet wurde, wird der Laserscanner über folgenden Befehl gestartet. Dabei wird auch AMCL mitgestartet.
-
-_Terminal 4:_ `roslaunch realsense2_camera amcl_lidar.launch`
-
-Nun starten wir SLAM- Gmapping, diese Node wird bis zum Starten der LiDAR nichts machen, da sie noch auf Scandaten wartet.
-
-_Terminal 5:_ `rosrun gmapping slam_gmapping scan:=scan`
+_Terminal 4:_ `rosrun gmapping slam_gmapping scan:=scan`
 
 Schließlich kann auch der Kern des Navigation Stacks gestartet werden:
 
-_Terminal 6:_ `roslaunch jetson_racer move_base.launch`
+_Terminal 5:_ `roslaunch jetson_racer move_base.launch`
 
 
 In Rviz, oben auf der Toolbar, kann man auf "2d Nav Goal" klicken und eine Pose dem Navigation Stack übergeben, der daraufhin einen Pfad hin plant und auch ausführt. Einige Parameter müssen noch genauer betrachtet und "fine tuned" werden.
@@ -236,6 +219,6 @@ _Terminal 4:_ `rosrun opencv find_ball.py`
 
 Und schließlich wird die Verfolgung gestartet:
 
-_Terminal 5:_ `rosrun opencv chase.py
+_Terminal 5:_ `rosrun opencv chase.py`
 
 Wenn jetzt ein blauer Ball vor der Kamera gehalten wird, wird sich der Fennec zum Ball bewegen und entsprechend auch korrigieren.
