@@ -9,6 +9,8 @@
 
 ## Powerpoint-Präsentation Sprint 2: [Google Docs](https://drive.google.com/file/d/15EYwAGZ4gDesyfAvPCeXksNx87YFiDXL/view?usp=sharing)
 
+## Präsentation Sprint 3 mit Embedded Videos: [Google Docs](/cmd_vel [geometry_msgs/Twist])
+
 
 # Installation
 
