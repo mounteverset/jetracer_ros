@@ -1,19 +1,19 @@
 <launch>
-      <arg name="use_gui" default="false" />
-    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find jetson_racer)/urdf/jetracer.xacro'"/>
+    <arg name="use_gui" default="false" />
+    
 
     <!-- source fennec-jet-racer/Software/catkin_ws/devel/setup.bash-->
     
-    <rosparam file= "$(find jetson_racer)/config/joints.yaml" command="load"/>
+    <!--<rosparam file= "$(find jetson_racer)/config/joints.yaml" command="load"/>
     <include file="$(find jetson_racer)/launch/ros_controllers.launch"></include>
+    -->
+
+    <!--<remap from="/cmd_vel" to="/ackerman_control/cmd_vel"/>-->
 
 
-    <remap from="/cmd_vel" to="/ackerman_control/cmd_vel"/>
-
-
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+    <!--<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>-->
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find jetson_racer)/rviz/jetracer.rviz"/>
-    <node name="joint_state_publisher" pkg="jetson_racer" type="joint_state.py"/>
+    <!--<node name="joint_state_publisher" pkg="jetson_racer" type="joint_state.py"/>-->
 
 
 </launch>
