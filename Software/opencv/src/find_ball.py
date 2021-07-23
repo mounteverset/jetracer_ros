@@ -59,7 +59,6 @@ class BlobDetector:
         self.mask_pub = rospy.Publisher("/blob/image_mask",Image,queue_size=1)
         print (">> Publishing position to topic point_blob")
         self.blob_pub  = rospy.Publisher("/blob/point_blob",Point,queue_size=1)
-        self.
 
         self.bridge = CvBridge()
         self.image_sub = rospy.Subscriber("/camera/color/image_raw",Image,self.callback)
@@ -112,10 +111,6 @@ class BlobDetector:
             except CvBridgeError as e:
                 print(e)            
 
-
-            # Vorschlag order by keypoint.size -> dann nur den ersten nehmen weil das der größte ist
-            # Vorschlag mindestgroesse fuer s festlegen, dass dieses random erkennen nicht stattfindet
-            
             for i, keyPoint in enumerate(keypoints):
                 #--- Here you can implement some tracking algorithm to filter multiple detections
                 #--- We are simply getting the first result
@@ -125,29 +120,39 @@ class BlobDetector:
                 print ("kp %d: s = %3d   x = %3d  y= %3d"%(i, s, x, y))
                 
                 #--- Find x and y position in camera adimensional frame
-                x, y = get_blob_relative_position(cv_image, keyPoint)
+                #x, y = get_blob_relative_position(cv_image, keyPoint)
                 
                 self.blob_point.x = x
                 self.blob_point.y = y
-                self.blob_pub.publish(self.blob_point) 
-                break
+                if(s>30):
+                    print (self.blob_point.x)
+                    self.blob_pub.publish(self.blob_point)
+                    break
                     
             fps = 1.0/(time.time()-self._t0)
             self._t0 = time.time()
             
 def main(args):
-    blue_min = (101,211,64)
-    blue_max = (255, 255, 255) 
+    #blue_min = (101,211,64) original
+    #blue_max = (255, 255, 255) original
+    blue_min = (25, 71, 073)
+    blue_max = (57, 196, 255)
+    black_min = (90, 112, 14)
+    black_max = (255, 255, 255)
     # blue_min = (82,31,62)
     # blue_max = (106, 116, 193)     
     # blue_min = (55,40,0)
     # blue_max = (150, 255, 255)     
     
-    blur     = 5
+    blur     = 0
     min_size = 10
     max_size = 40
     
     #--- detection window respect to camera frame in [x_min, y_min, x_max, y_max] adimensional (0 to 1)
+    # x_min   = 0.2
+    # x_max   = 0.9
+    # y_min   = 0.4
+    # y_max   = 0.9
     x_min   = 0
     x_max   = 1
     y_min   = 0
@@ -164,7 +169,7 @@ def main(args):
     # Filter by Area.
     params.filterByArea = True
     params.minArea = 20
-    params.maxArea = 20000
+    params.maxArea = 200000
      
     # Filter by Circularity
     params.filterByCircularity = True
