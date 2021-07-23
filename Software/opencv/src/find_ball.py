@@ -109,7 +109,16 @@ class BlobDetector:
                 self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
                 self.mask_pub.publish(self.bridge.cv2_to_imgmsg(mask, "8UC1"))
             except CvBridgeError as e:
-                print(e)            
+                print(e)    
+
+            # keypoints.sort(key=keypoints.size)    
+
+            # if keypoints[0].size > 20:
+            #     self.blob_point.x = keypoints[0].pt[0]
+            #     self.blob_point.y = keypoints[0].pt[1]
+                
+            #     self.blob_pub.publish(self.blob_point)
+
 
             for i, keyPoint in enumerate(keypoints):
                 #--- Here you can implement some tracking algorithm to filter multiple detections
@@ -135,7 +144,7 @@ class BlobDetector:
 def main(args):
     #blue_min = (101,211,64) original
     #blue_max = (255, 255, 255) original
-    blue_min = (25, 71, 073)
+    blue_min = (25, 71, 73)
     blue_max = (57, 196, 255)
     black_min = (90, 112, 14)
     black_max = (255, 255, 255)
