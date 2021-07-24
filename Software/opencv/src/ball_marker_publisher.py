@@ -7,6 +7,7 @@ from cv_bridge import CvBridge
 from geometry_msgs.msg import Point, Pose
 from sensor_msgs.msg import Image, CameraInfo
 from visualization_msgs.msg import Marker
+import tf
 
 class BallDepthGetter():
 
@@ -21,7 +22,6 @@ class BallDepthGetter():
         self.camera_intrinsics = None
         self.depth = 0
         self.ball_pose = Pose()
-
         self.marker = Marker()
         self.marker.header.frame_id = "camera_link"
         self.marker.type = Marker.SPHERE
@@ -33,6 +33,8 @@ class BallDepthGetter():
         self.marker.color.g = 0.0
         self.marker.color.a = 1.0
         self.marker_pub = rospy.Publisher("visualization_marker", Marker, queue_size=5)
+        self.ball_tf = tf.TransformBroadcaster()
+        
 
         # self.position_tolerance = 0.1
         
@@ -73,9 +75,6 @@ class BallDepthGetter():
         self.marker.pose.position.y = y_coord
 
 
-
-
-
     def ball_depth_node(self):
         depth_image_sub = rospy.Subscriber("/camera/aligned_depth_to_color/image_raw", Image, self.depth_callback)
         blob_pixel_sub = rospy.Subscriber("/blob/point_blob", Point, self.blob_point_callback)
@@ -86,6 +85,11 @@ class BallDepthGetter():
             angle = self.calculate_angle()
             self.calculate_position(angle)
             self.marker_pub.publish(self.marker)
+            self.ball_tf.sendTransform((self.marker.pose.position.x,self.marker.pose.position.y,self.marker.pose.position.z),
+                         (0.0, 0.0, 0.0, 1.0),
+                         rospy.Time.now(),
+                         "ball",
+                         "camera_link")
             rate.sleep()
         #rospy.spin()
             # rospy.loginfo("Depth: {0}".format(self.depth))
@@ -93,6 +97,6 @@ class BallDepthGetter():
 
 
 if __name__ == '__main__':
-    print("Startin...")
+    print("Starting...")
     ball_depth_getter = BallDepthGetter()
     ball_depth_getter.ball_depth_node()
