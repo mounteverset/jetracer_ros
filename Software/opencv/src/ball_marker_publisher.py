@@ -24,7 +24,6 @@ class BallDepthGetter():
         self.camera_intrinsics = None
         self.depth = 0
         self.ball_pose = Pose()
-
         self.marker = Marker()
         self.marker.header.frame_id = "camera_link"
         self.marker.type = Marker.SPHERE
@@ -37,6 +36,8 @@ class BallDepthGetter():
         self.marker.color.g = 1.0
         self.marker.color.a = 1.0
         self.marker_pub = rospy.Publisher("visualization_marker", Marker, queue_size=5)
+        self.ball_tf = tf.TransformBroadcaster()
+        
 
         self.broadcaster = tf2_ros.TransformBroadcaster()
         self.ball_transform = geometry_msgs.msg.TransformStamped()
@@ -116,6 +117,6 @@ class BallDepthGetter():
 
 
 if __name__ == '__main__':
-    print("Startin...")
+    print("Starting...")
     ball_depth_getter = BallDepthGetter()
     ball_depth_getter.ball_depth_node()
