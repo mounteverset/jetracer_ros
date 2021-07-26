@@ -126,7 +126,7 @@ class BlobDetector:
                 x = keyPoint.pt[0]
                 y = keyPoint.pt[1]
                 s = keyPoint.size
-                print ("kp %d: s = %3d   x = %3d  y= %3d"%(i, s, x, y))
+                #print ("kp %d: s = %3d   x = %3d  y= %3d"%(i, s, x, y))
                 
                 #--- Find x and y position in camera adimensional frame
                 #x, y = get_blob_relative_position(cv_image, keyPoint)
@@ -134,7 +134,7 @@ class BlobDetector:
                 self.blob_point.x = x
                 self.blob_point.y = y
                 if(s>30):
-                    print (self.blob_point.x)
+                    print ("kp %d: s = %3d   x = %3d  y= %3d"%(i, s, x, y))
                     self.blob_pub.publish(self.blob_point)
                     break
                     
@@ -142,16 +142,11 @@ class BlobDetector:
             self._t0 = time.time()
             
 def main(args):
-    #blue_min = (101,211,64) original
-    #blue_max = (255, 255, 255) original
-    blue_min = (25, 71, 73)
-    blue_max = (57, 196, 255)
-    black_min = (90, 112, 14)
-    black_max = (255, 255, 255)
-    # blue_min = (82,31,62)
-    # blue_max = (106, 116, 193)     
-    # blue_min = (55,40,0)
-    # blue_max = (150, 255, 255)     
+    blue_min = (102,144,51)
+    blue_max = (149, 255, 255)
+    #blue_min = (24, 82, 113) actually yellow
+    #blue_max = (255, 255, 255) actually yellow
+  
     
     blur     = 0
     min_size = 10

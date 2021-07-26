@@ -19,24 +19,24 @@ TebLocalPlannerROS:
   
  teb_autosize: True
  dt_ref: 0.3
- dt_hysteresis: 0.1
+ dt_hysteresis: 0.02
  global_plan_overwrite_orientation: True
  max_global_plan_lookahead_dist: 3.0
  feasibility_check_no_poses: 5
-    
+ allow_init_with_backwards_motion: True
  # Robot
          
- max_vel_x: 0.4
- max_vel_x_backwards: 0.2
- max_vel_theta: 0.6
- acc_lim_x: 0.5
- acc_lim_theta: 0.5
- min_turning_radius: 0.0
+ max_vel_x: 0.25
+ max_vel_x_backwards: 0.25
+ max_vel_theta: 1.0
+ acc_lim_x: 1.0
+ acc_lim_theta: 0.4
+ min_turning_radius: 0.45
  footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
-   type: "point"
+   type: "line"
    radius: 0.2 # for type "circular"
-   line_start: [-0.3, 0.0] # for type "line"
-   line_end: [0.3, 0.0] # for type "line"
+   line_start: [-0.12, 0.0] # for type "line"
+   line_end: [0.12, 0.0] # for type "line"
    front_offset: 0.2 # for type "two_circles"
    front_radius: 0.2 # for type "two_circles"
    rear_offset: 0.2 # for type "two_circles"
@@ -46,23 +46,23 @@ TebLocalPlannerROS:
  # GoalTolerance
     
  xy_goal_tolerance: 0.3
- yaw_goal_tolerance: 0.2
+ yaw_goal_tolerance: 0.25
  free_goal_vel: False
     
  # Obstacles
     
- min_obstacle_dist: 0.2
+ min_obstacle_dist: 0.15
  include_costmap_obstacles: True
- costmap_obstacles_behind_robot_dist: 1.0
- obstacle_poses_affected: 30
+ costmap_obstacles_behind_robot_dist: 5.0
+ obstacle_poses_affected: 15
  costmap_converter_plugin: ""
  costmap_converter_spin_thread: True
  costmap_converter_rate: 5
 
  # Optimization
     
- no_inner_iterations: 5
- no_outer_iterations: 4
+ no_inner_iterations: 3
+ no_outer_iterations: 2
  optimization_activate: True
  optimization_verbose: False
  penalty_epsilon: 0.1
@@ -77,11 +77,12 @@ TebLocalPlannerROS:
  weight_obstacle: 50
  weight_dynamic_obstacle: 10 # not in use yet
  alternative_time_cost: False # not in use yet
+ weight_shortest_path: 100
 
  # Homotopy Class Planner
 
  enable_homotopy_class_planning: True
- enable_multithreading: True
+ enable_multithreading: False
  simple_exploration: False
  max_number_classes: 4
  roadmap_graph_no_samples: 15
@@ -91,3 +92,4 @@ TebLocalPlannerROS:
  obstacle_keypoint_offset: 0.1
  obstacle_heading_threshold: 0.45
  visualize_hc_graph: False
+
