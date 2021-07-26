@@ -49,7 +49,7 @@ class BallDepthGetter():
         
     def depth_callback(self, data):
         cv_image = self.cv_bridge.imgmsg_to_cv2(data, data.encoding)
-        self.depth = cv_image[self.blob_point.y, self.blob_point.x] / 1000.0
+        self.depth = (cv_image[self.blob_point.y, self.blob_point.x] / 1000.0) + 0.05
         #rospy.loginfo("Got called in Depth Callback")
         rospy.loginfo("Depth: {0}".format(self.depth))
 
@@ -105,7 +105,8 @@ class BallDepthGetter():
         return x_coord, y_coord
 
     def ball_depth_node(self):
-        depth_image_sub = rospy.Subscriber("/camera/aligned_depth_to_color/image_raw", Image, self.depth_callback)
+        # depth_image_sub = rospy.Subscriber("/camera/aligned_depth_to_color/image_raw", Image, self.depth_callback)
+        depth_image_sub = rospy.Subscriber("/camera/depth/image_rect_raw", Image, self.depth_callback)
         blob_pixel_sub = rospy.Subscriber("/blob/point_blob", Point, self.blob_point_callback)
         # rate = rospy.Rate(2)
         # camera_info_sub = rospy.Subscriber("/camera/depth/camera_info", CameraInfo, camera_info_callback)
