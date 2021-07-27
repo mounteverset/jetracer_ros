@@ -1,0 +1,8 @@
+<launch>
+    <include file="$(find rf2o_laser_odometry)/launch/rf2o_laser_odometry.launch"></include>
+    <include file="$(find gmapping)/launch/slam_gmapping_pr2.launch"></include>
+    <include file="$(find jetson_racer)/launch/move_base.launch"></include>
+    <include file="$(find opencv)/launch/fennec_cv.launch"></include>
+    <include file="$(find find_object_2d)/launch/find_object_3d.launch"></include>
+    <include file="$(find jetson_racer)/launch/rviz.launch"></include>
+</launch>

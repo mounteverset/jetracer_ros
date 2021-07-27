@@ -20,20 +20,24 @@ class BallDepthGetter():
         point.x = 0
         point.y = 0
         point.z = 0
+
+        self.ball_detected = False
+
         self.blob_point = point
         self.camera_intrinsics = None
         self.depth = 0
         self.ball_pose = Pose()
         self.marker = Marker()
+        self.marker.id = 1
         self.marker.header.frame_id = "camera_link"
         self.marker.type = Marker.SPHERE
-        self.marker.scale.x = 0.15
-        self.marker.scale.y = 0.15
-        self.marker.scale.z = 0.15   
-        self.marker.pose.position.z = 0.075    
-        self.marker.color.b = 0.0
-        self.marker.color.r = 1.0
-        self.marker.color.g = 1.0
+        self.marker.scale.x = 0.25
+        self.marker.scale.y = 0.25
+        self.marker.scale.z = 0.25   
+        self.marker.pose.position.z = 0.125   
+        self.marker.color.b = 1.0
+        self.marker.color.r = 0.0
+        self.marker.color.g = 0.0
         self.marker.color.a = 1.0
         self.marker_pub = rospy.Publisher("visualization_marker", Marker, queue_size=5)
         self.ball_tf = tf.TransformBroadcaster()
@@ -42,7 +46,7 @@ class BallDepthGetter():
         self.broadcaster = tf2_ros.TransformBroadcaster()
         self.ball_transform = geometry_msgs.msg.TransformStamped()
         self.ball_transform.header.frame_id = "camera_link"
-        self.ball_transform.child_frame_id = "ball"
+        self.ball_transform.child_frame_id = "blob"
 
 
         # self.position_tolerance = 0.1
@@ -57,6 +61,7 @@ class BallDepthGetter():
     def blob_point_callback(self, data):
         self.blob_point.x = int(data.x)
         self.blob_point.y = int(data.y)
+        self.ball_detected = True
         #rospy.loginfo("Got called in Blob Point Callback")
         rospy.loginfo("Blob Point x: {0} y:{1}".format(self.blob_point.x, self.blob_point.y))
 
@@ -64,11 +69,12 @@ class BallDepthGetter():
 
         x_coord, y_coord = self.calculate_position(angle)
 
-        self.marker.pose.position.x = x_coord
-        self.marker.pose.position.y = y_coord
+        if (abs(self.marker.pose.position.x - x_coord) > 0.5 or abs(self.marker.pose.position.y - y_coord) > 0.5):
+            self.marker.pose.position.x = x_coord
+            self.marker.pose.position.y = y_coord
 
-        self.marker_pub.publish(self.marker)
-        self.broadcast_tf()
+            self.marker_pub.publish(self.marker)
+            self.broadcast_tf()
     
     # def camera_info_callback(self, data):
 
@@ -108,11 +114,14 @@ class BallDepthGetter():
         # depth_image_sub = rospy.Subscriber("/camera/aligned_depth_to_color/image_raw", Image, self.depth_callback)
         depth_image_sub = rospy.Subscriber("/camera/depth/image_rect_raw", Image, self.depth_callback)
         blob_pixel_sub = rospy.Subscriber("/blob/point_blob", Point, self.blob_point_callback)
-        # rate = rospy.Rate(2)
+        rate = rospy.Rate(100)
         # camera_info_sub = rospy.Subscriber("/camera/depth/camera_info", CameraInfo, camera_info_callback)
-        # while not rospy.is_shutdown():
-        #     rate.sleep()
-        rospy.spin()
+        while not rospy.is_shutdown():
+            # if self.ball_detected == True:
+            #     self.marker_pub.publish(self.marker)
+            #     # self.broadcast_tf()
+                rate.sleep()
+        #rospy.spin()
             # rospy.loginfo("Depth: {0}".format(self.depth))
             # rospy.loginfo("Blob Point x: {0} y:{1}".format(self.blob_point.x, self.blob_point.y))
 
