@@ -67,11 +67,11 @@ class BallInsTor():
             # kurze Pause zwischen den einzelnen Schuessen
             #if (rospy.Time.now() - self.time_last_scoring_attempt) > 2:
 
-            self.transform_listener.waitForTransform("/map", "/object_6",  rospy.Time(0), rospy.Duration(15.0))
+            self.transform_listener.waitForTransform("/map", "/wilson_bag",  rospy.Time(0), rospy.Duration(15.0))
             self.transform_listener.waitForTransform("/map", "/ball", rospy.Time(0), rospy.Duration(15.0))
             # self.transform_listener.waitForTransform("/map", "/base_link", rospy.Time(0), rospy.Duration(10.0))
 
-            trans_goal, rot_goal = self.transform_listener.lookupTransform("map", "object_6", rospy.Time(0))
+            trans_goal, rot_goal = self.transform_listener.lookupTransform("map", "wilson_bag", rospy.Time(0))
             trans_ball, rot_ball = self.transform_listener.lookupTransform("map", "ball", rospy.Time(0))
 
             self.scoring_goal_pose.transform.translation.x = trans_goal[0]

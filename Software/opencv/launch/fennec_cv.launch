@@ -1,0 +1,6 @@
+<launch>
+    <node name="ball_marker_publisher" pkg="opencv" type="ball_marker_publisher.py"/>
+    <node name="find_ball" pkg="opencv" type="find_ball.py"/>
+    <node name="goal_marker_publisher" pkg="opencv" type="goal_marker_publisher.py"/>
+    <node name="ball_transform_broadcaster" pkg="opencv" type="ball_transform_broadcaster.py"/>
+</launch>
